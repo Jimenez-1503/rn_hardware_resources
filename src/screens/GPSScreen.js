@@ -1,7 +1,13 @@
-import * as Location from 'expo-location';
-import { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import MapView, { Marker } from 'react-native-maps';
+import * as Location from "expo-location";
+import { useEffect, useRef, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import MapView, { Marker } from "react-native-maps";
 
 export default function GPSScreen() {
   const [permissionStatus, setPermissionStatus] = useState(null);
@@ -21,8 +27,8 @@ export default function GPSScreen() {
   async function requestPermission() {
     const { status } = await Location.requestForegroundPermissionsAsync();
     setPermissionStatus(status);
-    if (status !== 'granted') {
-      setError('Permissao de localizacao negada.');
+    if (status !== "granted") {
+      setError("Permissao de localizacao negada.");
     }
   }
 
@@ -35,7 +41,7 @@ export default function GPSScreen() {
       });
       setLocation(result);
     } catch (e) {
-      setError('Nao foi possivel obter a localizacao.');
+      setError("Nao foi possivel obter a localizacao.");
     }
   }
 
@@ -43,7 +49,11 @@ export default function GPSScreen() {
   async function startWatching() {
     setError(null);
     const subscription = await Location.watchPositionAsync(
-      { accuracy: Location.Accuracy.High, timeInterval: 1000, distanceInterval: 1 },
+      {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 1000,
+        distanceInterval: 1,
+      },
       (result) => setLocation(result),
     );
     watchRef.current = subscription;
@@ -56,7 +66,7 @@ export default function GPSScreen() {
     setWatching(false);
   }
 
-  const granted = permissionStatus === 'granted';
+  const granted = permissionStatus === "granted";
 
   // Delta pequeno gera um zoom mais proximo, centralizado na posicao atual
   const mapRegion = location
@@ -71,8 +81,12 @@ export default function GPSScreen() {
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Section title="Permissao">
-        <InfoRow label="Status" value={permissionStatus ?? 'Nao solicitada'} />
-        <Button label="Solicitar permissao" onPress={requestPermission} color="#1a73e8" />
+        <InfoRow label="Status" value={permissionStatus ?? "Nao solicitada"} />
+        <Button
+          label="Solicitar permissao"
+          onPress={requestPermission}
+          color="#1a73e8"
+        />
       </Section>
 
       <Section title="Localizacao atual">
@@ -86,7 +100,11 @@ export default function GPSScreen() {
 
       <Section title="Rastreamento em tempo real">
         {watching ? (
-          <Button label="Parar rastreamento" onPress={stopWatching} color="#db4437" />
+          <Button
+            label="Parar rastreamento"
+            onPress={stopWatching}
+            color="#db4437"
+          />
         ) : (
           <Button
             label="Iniciar rastreamento"
@@ -115,28 +133,37 @@ export default function GPSScreen() {
           </Section>
 
           <Section title="Dados da localizacao">
-            <InfoRow label="Latitude" value={location.coords.latitude.toFixed(6)} />
-            <InfoRow label="Longitude" value={location.coords.longitude.toFixed(6)} />
+            <InfoRow
+              label="Latitude"
+              value={location.coords.latitude.toFixed(6)}
+            />
+            <InfoRow
+              label="Longitude"
+              value={location.coords.longitude.toFixed(6)}
+            />
             <InfoRow
               label="Altitude"
               value={
                 location.coords.altitude != null
                   ? `${location.coords.altitude.toFixed(1)} m`
-                  : 'N/A'
+                  : "N/A"
               }
             />
-            <InfoRow label="Precisao" value={`${location.coords.accuracy?.toFixed(1)} m`} />
+            <InfoRow
+              label="Precisao"
+              value={`${location.coords.accuracy?.toFixed(1)} m`}
+            />
             <InfoRow
               label="Velocidade"
               value={
                 location.coords.speed != null && location.coords.speed >= 0
                   ? `${(location.coords.speed * 3.6).toFixed(1)} km/h`
-                  : 'N/A'
+                  : "N/A"
               }
             />
             <InfoRow
               label="Timestamp"
-              value={new Date(location.timestamp).toLocaleTimeString('pt-BR')}
+              value={new Date(location.timestamp).toLocaleTimeString("pt-BR")}
             />
           </Section>
         </>
@@ -166,7 +193,7 @@ function InfoRow({ label, value }) {
 function Button({ label, onPress, color, disabled }) {
   return (
     <TouchableOpacity
-      style={[styles.button, { backgroundColor: disabled ? '#ccc' : color }]}
+      style={[styles.button, { backgroundColor: disabled ? "#ccc" : color }]}
       onPress={onPress}
       disabled={disabled}
       activeOpacity={0.8}
@@ -177,35 +204,40 @@ function Button({ label, onPress, color, disabled }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: '#f5f5f5', flexGrow: 1 },
+  container: { padding: 16, backgroundColor: "#f5f5f5", flexGrow: 1 },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
     elevation: 1,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
     shadowRadius: 2,
   },
-  sectionTitle: { fontSize: 15, fontWeight: 'bold', color: '#333', marginBottom: 10 },
-  map: { width: '100%', height: 280, borderRadius: 8 },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+  },
+  map: { width: "100%", height: 280, borderRadius: 8 },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
-  label: { fontSize: 14, color: '#666' },
-  value: { fontSize: 14, color: '#202124', fontWeight: '500' },
+  label: { fontSize: 14, color: "#666" },
+  value: { fontSize: 14, color: "#202124", fontWeight: "500" },
   button: {
     paddingVertical: 11,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginTop: 8,
   },
-  buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
-  error: { color: '#db4437', textAlign: 'center', marginBottom: 12 },
+  buttonText: { color: "#fff", fontWeight: "bold", fontSize: 14 },
+  error: { color: "#db4437", textAlign: "center", marginBottom: 12 },
 });

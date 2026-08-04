@@ -1,6 +1,12 @@
-import { Accelerometer } from 'expo-sensors';
-import { useEffect, useRef, useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Accelerometer } from "expo-sensors";
+import { useEffect, useRef, useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 // Frequencia de leitura do sensor: a cada 200ms um novo valor de x, y, z chega
 const UPDATE_INTERVAL_MS = 200;
@@ -37,10 +43,15 @@ export default function AccelerometerScreen() {
       <Section title="Disponibilidade">
         <InfoRow
           label="Sensor disponivel"
-          value={available == null ? 'Verificando...' : available ? 'Sim' : 'Nao'}
+          value={
+            available == null ? "Verificando..." : available ? "Sim" : "Nao"
+          }
           highlight={available}
         />
-        <InfoRow label="Intervalo de atualizacao" value={`${UPDATE_INTERVAL_MS} ms`} />
+        <InfoRow
+          label="Intervalo de atualizacao"
+          value={`${UPDATE_INTERVAL_MS} ms`}
+        />
       </Section>
 
       <Section title="Leituras (em g-force)">
@@ -60,21 +71,32 @@ export default function AccelerometerScreen() {
       </Section>
 
       {active ? (
-        <TouchableOpacity style={[styles.button, { backgroundColor: '#db4437' }]} onPress={stop} activeOpacity={0.8}>
+        <TouchableOpacity
+          style={[styles.button, { backgroundColor: "#db4437" }]}
+          onPress={stop}
+          activeOpacity={0.8}
+        >
           <Text style={styles.buttonText}>Parar leitura</Text>
         </TouchableOpacity>
       ) : (
         <TouchableOpacity
-          style={[styles.button, { backgroundColor: available === false ? '#ccc' : '#f4b400' }]}
+          style={[
+            styles.button,
+            { backgroundColor: available === false ? "#ccc" : "#f4b400" },
+          ]}
           onPress={start}
           disabled={available === false}
           activeOpacity={0.8}
         >
-          <Text style={[styles.buttonText, { color: '#333' }]}>Iniciar leitura</Text>
+          <Text style={[styles.buttonText, { color: "#333" }]}>
+            Iniciar leitura
+          </Text>
         </TouchableOpacity>
       )}
 
-      <Text style={styles.hint}>1 g = 9,81 m/s². Em repouso, o eixo Z deve marcar ~1 g.</Text>
+      <Text style={styles.hint}>
+        1 g = 9,81 m/s². Em repouso, o eixo Z deve marcar ~1 g.
+      </Text>
     </ScrollView>
   );
 }
@@ -86,7 +108,12 @@ function AxisBar({ label, value, color }) {
     <View style={styles.axisRow}>
       <Text style={[styles.axisLabel, { color }]}>{label}</Text>
       <View style={styles.barTrack}>
-        <View style={[styles.barFill, { width: `${clamped * 100}%`, backgroundColor: color }]} />
+        <View
+          style={[
+            styles.barFill,
+            { width: `${clamped * 100}%`, backgroundColor: color },
+          ]}
+        />
       </View>
       <Text style={styles.axisValue}>{value.toFixed(3)}</Text>
     </View>
@@ -120,48 +147,53 @@ function InfoRow({ label, value, highlight }) {
 }
 
 const styles = StyleSheet.create({
-  container: { padding: 16, backgroundColor: '#f5f5f5', flexGrow: 1 },
+  container: { padding: 16, backgroundColor: "#f5f5f5", flexGrow: 1 },
   section: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 10,
     padding: 16,
     marginBottom: 14,
     elevation: 1,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.08,
     shadowRadius: 2,
   },
-  sectionTitle: { fontSize: 15, fontWeight: 'bold', color: '#333', marginBottom: 10 },
+  sectionTitle: {
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 10,
+  },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: "#f0f0f0",
   },
-  label: { fontSize: 14, color: '#666' },
-  value: { fontSize: 14, color: '#202124', fontWeight: '500' },
-  valueGreen: { color: '#0f9d58' },
-  valueRed: { color: '#db4437' },
-  axisRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 10 },
-  axisLabel: { width: 20, fontSize: 15, fontWeight: 'bold' },
+  label: { fontSize: 14, color: "#666" },
+  value: { fontSize: 14, color: "#202124", fontWeight: "500" },
+  valueGreen: { color: "#0f9d58" },
+  valueRed: { color: "#db4437" },
+  axisRow: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
+  axisLabel: { width: 20, fontSize: 15, fontWeight: "bold" },
   barTrack: {
     flex: 1,
     height: 12,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: "#f0f0f0",
     borderRadius: 6,
     marginHorizontal: 8,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
-  barFill: { height: '100%', borderRadius: 6 },
-  axisValue: { width: 60, fontSize: 12, color: '#555', textAlign: 'right' },
+  barFill: { height: "100%", borderRadius: 6 },
+  axisValue: { width: 60, fontSize: 12, color: "#555", textAlign: "right" },
   button: {
     paddingVertical: 13,
     borderRadius: 8,
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: 14,
   },
-  buttonText: { color: '#fff', fontWeight: 'bold', fontSize: 14 },
-  hint: { fontSize: 12, color: '#999', textAlign: 'center' },
+  buttonText: { color: "#fff", fontWeight: "bold", fontSize: 14 },
+  hint: { fontSize: 12, color: "#999", textAlign: "center" },
 });
